@@ -3,7 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atlantic AI Solutions</title>
+    <title>Atlantic AI Solutions | AI Automation for Halifax Businesses</title>
+    <meta name="description" content="We build AI agents and automation for Halifax businesses. Sales automation, chatbots, custom dashboards. Book a free call.">
+    <meta name="theme-color" content="#0A2AFF">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Atlantic AI Solutions">
+    <meta property="og:description" content="AI Automation for Halifax Businesses.">
+    <meta property="og:site_name" content="Atlantic AI Solutions">
+    <meta property="og:locale" content="en_CA">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Atlantic AI Solutions">
+    <meta name="twitter:description" content="AI Automation for Halifax Businesses.">
+    <link rel="canonical" href="https://ruslan0010.github.io/mainWeb/">
 
     <link rel="preconnect" href="https://api.fontshare.com">
     <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,700,600,400&f[]=satoshi@300,400,500&display=swap" rel="stylesheet">
@@ -66,7 +77,6 @@
             -webkit-text-size-adjust: 100%;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            scroll-behavior: smooth;
         }
 
         img,
@@ -1214,6 +1224,66 @@
             flex-wrap: wrap;
         }
 
+        /* ============================================
+           RESPONSIVE — MOBILE
+        ============================================ */
+        @media (max-width: 768px) {
+            body { cursor: auto; }
+            .cursor { display: none !important; }
+
+            .container { padding: 0 20px; }
+            .section { padding: 72px 0; }
+
+            /* Header */
+            .header-inner { gap: 12px; }
+            .nav .nav-link { display: none; }
+            .nav-cta { padding: 10px 16px; font-size: 13px; }
+
+            /* Hero */
+            .hero { min-height: 560px; height: 100svh; }
+            .hero-overlay {
+                grid-template-columns: 1fr;
+                align-items: end;
+                gap: 8px;
+                padding: 100px 20px 20px;
+            }
+            .hero-corner { font-size: 10px; }
+            .hero-corner.center { display: none; }
+
+            /* Intro cards — single column */
+            .intro { padding: 72px 0; }
+            .intro-grid { grid-template-columns: 1fr; gap: 14px; }
+            .span-7, .span-5, .span-4, .span-8, .span-12 { grid-column: 1 / -1; }
+            .icard { min-height: 200px; padding: 28px 24px; border-radius: var(--radius-md); }
+            .icard-headline { font-size: clamp(36px, 10vw, 52px); }
+
+            /* Marquee */
+            .marquee-item { font-size: 28px !important; padding: 0 24px !important; }
+
+            /* About */
+            .about .section-head h2,
+            .section-head h2 { font-size: clamp(32px, 8vw, 44px); }
+
+            /* Work section — one column, extra scroll length */
+            .work-section { height: 400vh; }
+            .work-sticky { padding: 0 20px; height: 100vh; }
+            .work-grid { grid-template-columns: 1fr; gap: 14px; perspective: 900px; }
+            .work-col { gap: 14px; }
+            .work-card { padding: 22px 20px; }
+
+            /* Solutions */
+            .solutions .section-head h2 { font-size: clamp(32px, 8vw, 48px); }
+
+            /* Contact */
+            .contact-grid { grid-template-columns: 1fr; gap: 48px; }
+            .contact-left h2 { font-size: clamp(44px, 11vw, 64px); }
+            .form { padding: 24px; }
+
+            /* Footer */
+            .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+            .footer-bottom { flex-direction: column; align-items: flex-start; gap: 8px; }
+        }
+
     </style>
 </head>
 <body>
@@ -1623,14 +1693,23 @@
         let lenis = null;
         if (window.Lenis && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
             lenis = new Lenis({
-                duration: 1.4,
+                duration: 1.2,
                 easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
                 smoothWheel: true,
-                smoothTouch: false
+                smoothTouch: false,
+                wheelMultiplier: 1,
+                touchMultiplier: 1.5
             });
+            window.lenis = lenis;
+
             if (window.gsap) {
+                // Drive Lenis from GSAP ticker (single RAF loop)
                 gsap.ticker.add((time) => lenis.raf(time * 1000));
                 gsap.ticker.lagSmoothing(0);
+                // CRITICAL: tell ScrollTrigger to update on every Lenis scroll tick
+                if (window.ScrollTrigger) {
+                    lenis.on('scroll', ScrollTrigger.update);
+                }
             } else {
                 const raf = (t) => { lenis.raf(t); requestAnimationFrame(raf); };
                 requestAnimationFrame(raf);
